@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Recommendations for User {{ user_id }}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Varela Round', sans-serif;
+      color: #595959;
+      background-color: #f8f8f8;
+    }
+    h1 {
+      text-align: center;
+      margin-top: 60px;
+      font-size: 32px;
+    }
+    .divider {
+      width: 100%;
+      height: 1px;
+      background-color: #ccc;
+      margin: 30px 0;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px 40px 80px;
+      text-align: center;
+    }
+    .recommendation-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 30px;
+      margin-top: 30px;
+      justify-items: center;
+    }
+    .film-frame {
+      background: url('{{ url_for('static', filename='frame.webp') }}') no-repeat center center;
+      background-size: contain;
+      width: 100%;
+      max-width: 950px;
+      aspect-ratio: 4 / 3;
+      border-radius: 35px;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 30px;
+      box-sizing: border-box;
+      margin: 0 auto;
+    }
+    .film-text {
+      max-width: 90%;
+      margin: 0 auto;
+    }
+    .film-text p {
+      margin: 8px 0;
+      font-size: 18px;
+    }
+    .return-home {
+      display: inline-block;
+      margin-top: 80px;
+      padding: 30px 60px;
+      background-color: #7B7B7B;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      text-decoration: none;
+      font-size: 24px;
+    }
+    .return-home:hover {
+      background-color: #444;
+    }
+  </style>
+</head>
+<body>
+  <h1>Recommendations for User {{ user_id }}</h1>
+  <div class="divider"></div>
+  <div class="container">
+    <div class="recommendation-grid">
+      {% for rec in recs %}
+      <div class="film-frame">
+        <div class="film-text">
+          <p>Movie ID: {{ rec[0] }}</p>
+          <p>Movie Title: {{ rec[2] }}</p>
+          <p>Predicted Rating: {{ "%.2f"|format(rec[1]) }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <a href="/" class="return-home">Return to Home</a>
+  </div>
+</body>
+</html>

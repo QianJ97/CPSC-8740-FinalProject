@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Movie Recommendation</h1>
+<div class="divider"></div>
+
+<div class="container">
+  <div class="carousel-container">
+    <div class="carousel">
+      <div class="carousel-images">
+        <img src="{{ url_for('static', filename='black_mirror.jpg') }}" alt="Movie Image 1">
+        <img src="{{ url_for('static', filename='frozen.png') }}" alt="Movie Image 2">
+        <img src="{{ url_for('static', filename='iceage.jpg') }}" alt="Movie Image 3">
+        <img src="{{ url_for('static', filename='toy.webp') }}" alt="Movie Image 4">
+      </div>
+    </div>
+    <button class="carousel-arrow left">&#9664;</button>
+    <button class="carousel-arrow right">&#9654;</button>
+  </div>
+  <div class="carousel-indicators">
+    <span class="active" data-index="0"></span>
+    <span data-index="1"></span>
+    <span data-index="2"></span>
+    <span data-index="3"></span>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<div class="login-section">
+  <h2>Login for personal recommendation</h2>
+  <form action="/login" method="post">
+    <input type="text" name="user_id" placeholder="Enter your User ID" required>
+    <input type="submit" value="search">
+  </form>
+</div>
+
+<div class="genres">
+  Genres:
+  {% for g in all_genres %}
+    <a href="/?genre={{ g }}&ajax=1#movies" class="ajax-link">{{ g }}</a>
+  {% endfor %}
+</div>
+
+{% include 'movies_fragment.html' %}
+
+<script>
+// Carousel
+const carouselImages = document.querySelector('.carousel-images');
+const images = document.querySelectorAll('.carousel-images img');
+const leftArrow = document.querySelector('.carousel-arrow.left');
+const rightArrow = document.querySelector('.carousel-arrow.right');
+const indicators = document.querySelectorAll('.carousel-indicators span');
+let currentIndex = 0;
+const totalImages = images.length;
+function updateCarousel() {
+  carouselImages.style.transform = 'translateX(-' + (currentIndex * 100) + '%)';
+  indicators.forEach((indicator, index) => {
+    if (index === currentIndex) {
+      indicator.classList.add('active');
+    } else {
+      indicator.classList.remove('active');
+    }
+  });
+}
+rightArrow.addEventListener('click', () => {
+  currentIndex = (currentIndex + 1) % totalImages;
+  updateCarousel();
+});
+leftArrow.addEventListener('click', () => {
+  currentIndex = (currentIndex - 1 + totalImages) % totalImages;
+  updateCarousel();
+});
+indicators.forEach(indicator => {
+  indicator.addEventListener('click', () => {
+    currentIndex = Number(indicator.getAttribute('data-index'));
+    updateCarousel();
+  });
+});
+setInterval(() => {
+  currentIndex = (currentIndex + 1) % totalImages;
+  updateCarousel();
+}, 5000);
+
+// AJAX
+function ajaxifyLinks() {
+  document.querySelectorAll("a.ajax-link").forEach(link => {
+    link.addEventListener("click", function(e) {
+      e.preventDefault();
+      const url = link.getAttribute("href");
+      fetch(url)
+        .then(response => response.text())
+        .then(html => {
+          document.getElementById("movies").innerHTML = html;
+          history.pushState(null, "", url.replace("&ajax=1", ""));
+          ajaxifyLinks();
+        })
+        .catch(err => console.error(err));
+    });
+  });
+}
+document.addEventListener("DOMContentLoaded", ajaxifyLinks);
+</script>
+{% endblock %}

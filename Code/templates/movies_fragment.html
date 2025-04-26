@@ -1,0 +1,17 @@
+<div id="movies">
+    <div class="movies-grid">
+      {% for idx, row in page_movies.iterrows() %}
+        <div class="film-frame">
+          <div class="film-text">
+            <p>Movie ID: {{ row.movieId }}</p>
+            <p>Movie Title: {{ row.title }}</p>
+            <p>Average Rating: {{ "%.2f"|format(row.avg_rating) }}</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <div class="pagination" style="margin-bottom: 30px;">
+      {{ pagination_html|safe }}
+    </div>
+  </div>
+  
