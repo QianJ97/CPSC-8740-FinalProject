@@ -1,6 +1,131 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Movie Recommendation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Varela Round', sans-serif;
+      color: #595959;
+      background-color: #f8f8f8;
+    }
+    h1 {
+      text-align: center;
+      font-size: 36px;
+      margin-top: 80px;
+      margin-bottom: 40px;
+    }
+    .divider {
+      width: 100%;
+      height: 1px;
+      background-color: #ccc;
+      margin: 40px 0;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 0 20px 40px;
+    }
+    .carousel-container {
+      position: relative;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .carousel {
+      overflow: hidden;
+    }
+    .carousel-images {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+    }
+    .carousel-images img {
+      width: 100%;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(105,105,105,0.8);
+      color: #fff;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 10px;
+      z-index: 10;
+    }
+    .carousel-arrow.left {
+      left: -80px;
+    }
+    .carousel-arrow.right {
+      right: -80px;
+    }
+    .carousel-indicators {
+      margin-top: 10px;
+    }
+    .carousel-indicators span {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      background-color: #ccc;
+      margin: 0 5px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+    .carousel-indicators span.active {
+      background-color: #595959;
+    }
+    .login-section {
+      text-align: center;
+      margin-top: 40px;
+      margin-bottom: 40px;
+    }
+    .login-section input[type="text"] {
+      padding: 16px;
+      font-size: 18px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      width: 300px;
+    }
+    .login-section input[type="submit"] {
+      padding: 16px 28px;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      background-color: #595959;
+      color: #fff;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+    .login-section input[type="submit"]:hover {
+      background-color: #444;
+    }
+    .genres {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .genres a {
+      margin: 0 6px;
+      text-decoration: none;
+      color: #595959;
+      font-size: 14px;
+      background-color: #f0f0f0;
+      padding: 6px 10px;
+      border-radius: 4px;
+    }
+    .genres a:hover {
+      background-color: #e0e0e0;
+    }
+  </style>
+</head>
+<body>
 
-{% block content %}
 <h1>Movie Recommendation</h1>
 <div class="divider"></div>
 
@@ -45,7 +170,6 @@
 {% include 'movies_fragment.html' %}
 
 <script>
-// Carousel
 const carouselImages = document.querySelector('.carousel-images');
 const images = document.querySelectorAll('.carousel-images img');
 const leftArrow = document.querySelector('.carousel-arrow.left');
@@ -56,11 +180,7 @@ const totalImages = images.length;
 function updateCarousel() {
   carouselImages.style.transform = 'translateX(-' + (currentIndex * 100) + '%)';
   indicators.forEach((indicator, index) => {
-    if (index === currentIndex) {
-      indicator.classList.add('active');
-    } else {
-      indicator.classList.remove('active');
-    }
+    indicator.classList.toggle('active', index === currentIndex);
   });
 }
 rightArrow.addEventListener('click', () => {
@@ -81,8 +201,6 @@ setInterval(() => {
   currentIndex = (currentIndex + 1) % totalImages;
   updateCarousel();
 }, 5000);
-
-// AJAX
 function ajaxifyLinks() {
   document.querySelectorAll("a.ajax-link").forEach(link => {
     link.addEventListener("click", function(e) {
@@ -101,4 +219,6 @@ function ajaxifyLinks() {
 }
 document.addEventListener("DOMContentLoaded", ajaxifyLinks);
 </script>
-{% endblock %}
+
+</body>
+</html>
