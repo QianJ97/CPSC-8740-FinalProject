@@ -135,4 +135,6 @@ def login():
     return render_template('login.html', user_id=user_id, recs=recs)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5001, debug=True, use_reloader=False)
+    import os
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
